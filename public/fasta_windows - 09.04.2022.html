@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet"
+      href="https://unpkg.com/@highlightjs/cdn-assets@11.5.0/styles/github.min.css">
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.5.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <script>
+  console.log(`%cWelcome to Max Carter-Brown's (my) website!
+    %cYou can see my source code at https://github.com/Euphrasiologist/euphrasiologist.github.io`,
+    "color: #FE612C; font-weight: bold; font-size: 18px;",
+    "color: #0f82f2; font-weight: bold;");
+  </script>
+  <style>
+    body {
+      background-color: white;
+    }
+
+    header h1 {
+      font-family: roboto;
+      color: black;
+      text-align: center;
+    }
+
+    header h1:hover {
+      color: #FE612C;
+    }
+
+    p {
+      font-family: roboto;
+      font-size: 16px;
+    }
+
+    a {
+      text-decoration: none; 
+    }
+
+    a:hover {
+      color: #FE612C;
+    }
+
+    .home_link {
+      font-family: roboto;
+      text-align: center;
+      font-size: 22px;
+      font-size: 4vw;
+    }
+    
+    #home_link {
+      color: black;
+    }
+    
+    #home_link:hover {
+      color: #FE612C;
+    }
+    
+    .about_link {
+      font-family: roboto;
+      text-align: center;
+      font-size: 22px;
+      font-size: 4vw;
+    }
+    
+    #about_link {
+      color: black;
+    }
+
+    #about_link:hover {
+      color: #FE612C;
+    }
+
+    .blog_link {
+      font-family: roboto;
+      text-align: left;
+      font-size: 20px;
+      font-size: 3vw;
+    }
+    
+    #blog_link {
+      color: #023020;
+    }
+
+    #blog_link:hover {
+      color: #FE612C;
+    }
+
+    .blog_date {
+      float: right;
+      position: relative;
+      bottom: 2vh;
+      text-align: center;
+      font-family: monospace;
+      /* so we don't get weird jumping of blog elements */
+      font-size: min(1.2vw, 30);
+      color: #FE612C;
+    }
+
+    .footer_text {
+      text-align: center;
+      font-family: monospace;
+      font-size: 12px;
+      color: #FE612C;
+    }
+
+    .welcome_anchor {
+      margin: auto;
+      width: 80%;
+      padding: 10px;
+      font-size: 26px;
+    }
+
+    .content {
+      margin: auto;
+      width: 40%;
+      padding: 10px;
+	  text-align: center;
+    }
+
+    .website_logo {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+
+  </style>
+    <title>Max Carter-Brown</title>
+  </head>
+  <body>
+    <header>
+      <img src="/img/website_logo.svg" alt="Made with RX!" class="website_logo">
+    </header>
+    <main>
+      <!-- Do I want a welcome anchor? -->
+      <!-- <p class="welcome_anchor"></p> -->
+      <section>
+        <div class="home_link">
+          <a href="/" id="home_link">Home</a>
+        </div>
+        <div class="about_link">
+          <a href="/about.html" id="about_link">About</a>
+        </div>
+        <br/>
+        <div class="content">
+          <h1>fasta_windows</h1>
+<p>To kick of the new blog series, I thought I’d talk about my first serious Rust project, <a href="https://github.com/tolkit/fasta_windows">fasta_windows</a>. It’s a pretty simple tool and most of its functionality is covered already by a wide range of bioinformatic software tools. However, as the great Heng Li once said - <a href="https://twitter.com/lh3lh3/status/1451600007115780098">“To tool developers, reinventing wheels is an important skill.”</a>. And at this point, I wanted to get Rust under my belt. So let’s get to the why and how.</p>
+<h2>Why?</h2>
+<p>I am currently working as part of the <a href="https://www.darwintreeoflife.org/">Darwin Tree of Life</a> project, which aims to sequence the genome of every eukaryotic organism in UK and Ireland to chromosomal quality. There are around 70,000 species, and the first <a href="https://www.darwintreeoflife.org/genomes/genome-notes/">100 genome notes</a> have just been published (with more in public databases). For these genomes, it would be nice to have a first pass analysis and visualisation for some basic statistics. As they are chromosomal, this makes visualisation even nicer! Eventually, I hope these statistic files, which will be TSV’s, will be deposited somewhere anyone can get their hands on them. </p>
+<h2>How?</h2>
+<p>The Darwin Tree of Life genomes are emitted as fasta files. The fasta file format is probably one of the most ubiquitous file formats in bioinformatics. It’s easy to generate and parse, and has only really two rules:</p>
+<ul>
+<li>A header line which starts with a <code>&gt;</code></li>
+<li>A sequence line(s) immediately below</li>
+</ul>
+<pre><code class="language-txt">&gt;header (you can put anything here you want. As long as it's valid UTF-8)
+ACTATTCACTTT
+&gt;another header
+CACACACATTTA
+</code></pre>
+<p>We can chop each of the sequences in a fasta file into chunks (non-overlapping in this case), and compute statistics on these chunks. Sounds simple enough! And it is really… let’s dive into the Rust implementation details.</p>
+<h2>Rust implementation details</h2>
+<p><a href="https://github.com/rust-bio/rust-bio">Rust Bio</a> is an excellent Rust crate providing I/O functionality for many common file types found in computational biology, amongst other things. It’s not <em>the fastest</em> solution out there for parsing fastas, but it’s well documented and has nice API’s.</p>
+<p>(Disclaimer: I’m poaching this from the <a href="https://github.com/tolkit/fasta_windows">fasta_windows</a> GitHub page, and haven’t <code>cargo check</code>-ed the following code.)</p>
+<pre><code class="language-rust">// we can use it like this
+use bio::io::fasta;
+
+// and make a reader
+let input_fasta = &quot;/path/to/some/fasta/on/disk.fasta&quot;;
+let reader = fasta::Reader::from_file(input_fasta).expect(&quot;Path invalid.&quot;);
+</code></pre>
+<p>The <a href="https://github.com/rayon-rs/rayon">rayon</a> Rust crate can easily turn a normal Rust iterator into a parallel one. We can leverage this when we want to iterate over all of our fasta records.</p>
+<pre><code class="language-rust">use std::sync::mpsc::channel;
+// got to make a sender and receiver channel
+let (sender, receiver) = channel();
+
+// use the reader from above
+reader
+    // records() is the iterator over fasta records
+    .records()
+    // magical parallel iterator
+    .par_bridge()
+    // this is where we do the hard work
+    .for_each_with(sender, |s, record| {
+        // we can access the fasta record here
+        let fasta_record = record.expect(&quot;Error during fasta record parsing.&quot;);
+
+        // optionally we can use the sender to send data through a 
+        // thread safe channel
+        // let's send a tuple of our fasta headers and seq lens... 
+        s.send((fasta_record.id(), fasta_record.seq().len()))
+    });
+
+// outside the parallel iterator now, phew.
+// let's collect our parallel booty into a vector
+let collection: Vec&lt;(&amp;str, usize)&gt; = receiver.iter().collect();
+
+// why not print it out
+for (id, length) in collection {
+    println!(&quot;Record: {}\nSequence length: {}&quot;, id, length);
+}
+
+</code></pre>
+<p>This is essentially the parallel iterator implementation in <code>fasta_windows</code>. Now to briefly mention how the statistics are generated in windows. Rust has a useful <a href="https://doc.rust-lang.org/std/primitive.slice.html#method.chunks">chunks</a> function, which operates on slices. As Rust Bio gives us back UTF-8 checked byte slices, this is perfect for what we need. <code>chunks</code> gives non-overlapping windows.</p>
+<pre><code class="language-rust">// fasta_record comes from above, it's of type 
+// bio::io::fasta::Record
+// the seq method returns a `TextSlice&lt;'_&gt;
+// which is just an alias for &amp; [u8]
+
+// 1kb windows
+let window_size = 1000;
+
+// make the chunks iterator
+// (actually going through this code has made me think
+// that a more elegant solution can be found here
+// with the `chunks_exact` method...)
+let windows = fasta_record.seq().chunks(window_size);
+
+// now we can do the interesting stuff
+
+// this is not how I did it, but for argument sake
+// we could make a GC struct
+struct GC {
+    percent: f32,
+}
+
+impl GC {
+    fn calc(&amp;self, dna: &amp;[u8]) -&gt; Self {
+        // actually do the calculation
+        Self { percent: ... }
+    }
+}
+
+for win in windows {
+    // calculate GC content etc here.
+    let gc = GC::calc(win);
+
+    // if this block is contained in the parallel
+    // for_each_with above, we could send this 
+    // gc result through this.
+    s.send(gc)
+}
+</code></pre>
+<p>There is some window logic to handle, like keeping track of the windows (what if they are too long or too short?), and some other statistics I calculate. The above code however is the main logic of the program! Delve into the source code at the repository to explore further (<a href="https://github.com/tolkit/fasta_windows"><strong>here</strong></a>). Or give it a go, and tell me what you think!</p>
+
+        </div>
+      </section>
+
+      <p class="footer_text">Made with Rust & love.</p>
+    </main>
+  </body>
+</html>
