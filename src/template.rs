@@ -1,3 +1,5 @@
+use crate::WebpageType;
+
 /// The header for all HTMLs in the website.
 ///
 /// As such, contains all `<style>` information.
@@ -23,7 +25,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
 
     header h1 {
-      font-family: roboto;
+      font-family: 'Courier New', monospace;
       color: black;
       text-align: center;
     }
@@ -33,7 +35,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
 
     p {
-      font-family: roboto;
+      font-family: 'Courier New', monospace;
       font-size: 16px;
     }
 
@@ -46,7 +48,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
 
     .home_link {
-      font-family: roboto;
+      font-family: 'Courier New', monospace;
       text-align: center;
       font-size: 22px;
       font-size: 4vw;
@@ -61,7 +63,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
     
     .about_link {
-      font-family: roboto;
+      font-family: 'Courier New', monospace;
       text-align: center;
       font-size: 22px;
       font-size: 4vw;
@@ -76,7 +78,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
 
     .blog_link {
-      font-family: roboto;
+      font-family: 'Courier New', monospace;
       text-align: left;
       font-size: 20px;
       font-size: 3vw;
@@ -122,11 +124,21 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
 	  text-align: center;
     }
 
+    .content-blog {
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .website_logo {
       display: block;
       margin-left: auto;
       margin-right: auto;
       width: 50%;
+    }
+
+    li {
+      font-family: 'Courier New', monospace;
     }
 
   </style>
@@ -135,7 +147,12 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
 "#;
 
 /// Render the body of the HTMLs.
-pub fn render_body(body: &str) -> String {
+pub fn render_body(body: &str, webpage: WebpageType) -> String {
+    let content_type = match webpage {
+        WebpageType::Index => "content",
+        WebpageType::Blog => "content-blog",
+    };
+
     format!(
         r#"  <body>
     <header>
@@ -152,19 +169,19 @@ pub fn render_body(body: &str) -> String {
           <a href="/about.html" id="about_link">About</a>
         </div>
         <br/>
-        <div class="content">
+        <div class="{}">
           {}
         </div>
       </section>
 
-      <p class="footer_text">Made with Rust & love.</p>
+      <p class="footer_text">Made with love.</p>
     </main>
   </body>"#,
-        body
+        content_type, body
     )
 }
 
 /// The footer for all HTMLs in the website.
-pub const FOOTER: &str = r#"
+pub const FOOTER: &str = r#"    
 </html>
 "#;

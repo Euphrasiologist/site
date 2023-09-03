@@ -4,6 +4,11 @@ use std::path::Path;
 /// The HTML template used for every page on the website.
 mod template;
 
+pub enum WebpageType {
+    Index,
+    Blog,
+}
+
 /// Build the website, copying all relevant files from other directories into
 /// the `public` folder.
 pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
@@ -43,7 +48,7 @@ pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
     let copy_status_img = std::process::Command::new("cp")
         .arg("-r")
         .arg("./img/")
-        .arg("public/")
+        .arg("public/img")
         .output()?;
 
     eprintln!(
@@ -74,7 +79,7 @@ pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
 
         pulldown_cmark::html::push_html(&mut body, parser);
 
-        html.push_str(template::render_body(&body).as_str());
+        html.push_str(template::render_body(&body, WebpageType::Blog).as_str());
         html.push_str(template::FOOTER);
 
         let html_file = file
@@ -137,7 +142,7 @@ fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
         .collect::<Vec<String>>()
         .join("<br/>\n");
 
-    html.push_str(template::render_body(&body).as_str());
+    html.push_str(template::render_body(&body, WebpageType::Index).as_str());
     html.push_str(template::FOOTER);
 
     let index_path = Path::new(&output_dir).join("index.html");
