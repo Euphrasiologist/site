@@ -15,7 +15,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
   <script>hljs.highlightAll();</script>
   <script>
   console.log(`%cWelcome to Max Carter-Brown's (my) website!
-    %cYou can see my source code at https://github.com/Euphrasiologist/euphrasiologist.github.io`,
+    %cYou can see my source code at https://github.com/Euphrasiologist/site`,
     "color: #FE612C; font-weight: bold; font-size: 18px;",
     "color: #0f82f2; font-weight: bold;");
   </script>
@@ -24,14 +24,20 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
       background-color: white;
     }
 
-    header h1 {
+    h1 {
       font-family: 'Courier New', monospace;
       color: black;
       text-align: center;
     }
 
-    header h1:hover {
+    h1:hover {
       color: #FE612C;
+    }
+
+    h2, h3, h4 {
+      font-family: 'Courier New', monospace;
+      color: black;
+      text-align: left;
     }
 
     p {
@@ -47,36 +53,21 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
       color: #FE612C;
     }
 
-    .home_link {
+    .home_links {
       font-family: 'Courier New', monospace;
       text-align: center;
       font-size: 22px;
       font-size: 4vw;
     }
     
-    #home_link {
+    #home_links {
       color: black;
     }
     
-    #home_link:hover {
+    #home_links:hover {
       color: #FE612C;
     }
     
-    .about_link {
-      font-family: 'Courier New', monospace;
-      text-align: center;
-      font-size: 22px;
-      font-size: 4vw;
-    }
-    
-    #about_link {
-      color: black;
-    }
-
-    #about_link:hover {
-      color: #FE612C;
-    }
-
     .blog_link {
       font-family: 'Courier New', monospace;
       text-align: left;
@@ -141,6 +132,11 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
       font-family: 'Courier New', monospace;
     }
 
+    .grid-parent {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr
+    }
+
   </style>
     <title>Max Carter-Brown</title>
   </head>
@@ -159,15 +155,19 @@ pub fn render_body(body: &str, webpage: WebpageType) -> String {
       <img src="/img/website_logo.svg" alt="Made with RX!" class="website_logo">
     </header>
     <main>
-      <!-- Do I want a welcome anchor? -->
-      <!-- <p class="welcome_anchor"></p> -->
       <section>
-        <div class="home_link">
-          <a href="/" id="home_link">Home</a>
+        <div class="grid-parent">
+        <div class="home_links">
+          <a href="/" id="home_links">Home</a>
         </div>
-        <div class="about_link">
-          <a href="/about.html" id="about_link">About</a>
+        <div class="home_links">
+          <a href="/about.html" id="home_links">About</a>
         </div>
+        <div class="home_links">
+          <a href="/research.html" id="home_links">Research</a>
+        </div>
+        </div>
+        
         <br/>
         <div class="{}">
           {}

@@ -19,20 +19,14 @@
       background-color: white;
     }
 
-    h1 {
+    header h1 {
       font-family: 'Courier New', monospace;
       color: black;
       text-align: center;
     }
 
-    h1:hover {
+    header h1:hover {
       color: #FE612C;
-    }
-
-    h2, h3, h4 {
-      font-family: 'Courier New', monospace;
-      color: black;
-      text-align: left;
     }
 
     p {
@@ -48,21 +42,36 @@
       color: #FE612C;
     }
 
-    .home_links {
+    .home_link {
       font-family: 'Courier New', monospace;
       text-align: center;
       font-size: 22px;
       font-size: 4vw;
     }
     
-    #home_links {
+    #home_link {
       color: black;
     }
     
-    #home_links:hover {
+    #home_link:hover {
       color: #FE612C;
     }
     
+    .about_link {
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      font-size: 22px;
+      font-size: 4vw;
+    }
+    
+    #about_link {
+      color: black;
+    }
+
+    #about_link:hover {
+      color: #FE612C;
+    }
+
     .blog_link {
       font-family: 'Courier New', monospace;
       text-align: left;
@@ -127,11 +136,6 @@
       font-family: 'Courier New', monospace;
     }
 
-    .grid-parent {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr
-    }
-
   </style>
     <title>Max Carter-Brown</title>
   </head>
@@ -141,40 +145,15 @@
     </header>
     <main>
       <section>
-        <div class="grid-parent">
-        <div class="home_links">
-          <a href="/" id="home_links">Home</a>
+        <div class="home_link">
+          <a href="/" id="home_link">Home</a>
         </div>
-        <div class="home_links">
-          <a href="/about.html" id="home_links">About</a>
+        <div class="about_link">
+          <a href="/about.html" id="about_link">About</a>
         </div>
-        <div class="home_links">
-          <a href="/research.html" id="home_links">Research</a>
-        </div>
-        </div>
-        
         <br/>
         <div class="content">
-          <div class="blog_link">
-                    <a href="/fasta_windows - 09.04.2022.html" id="blog_link">fasta_windows</a>
-                </div>
-                <span class="blog_date">09.04.2022</span>
-                <br/>
-<div class="blog_link">
-                    <a href="/first blog post - 01.04.2022.html" id="blog_link">first blog post</a>
-                </div>
-                <span class="blog_date">01.04.2022</span>
-                <br/>
-<div class="blog_link">
-                    <a href="/research.html" id="blog_link">research</a>
-                </div>
-                <span class="blog_date"></span>
-                <br/>
-<div class="blog_link">
-                    <a href="/about.html" id="blog_link">about</a>
-                </div>
-                <span class="blog_date"></span>
-                
+          
         </div>
       </section>
 
