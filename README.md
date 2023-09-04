@@ -54,7 +54,7 @@ urlopen("https://dynamicdns.park-your-domain.com/update?"
 
 You will need to run this script frequently, hourly-daily I would think. So whack it on a cron-job on your PI machine. `crontab -e` is your friend. For reference, I did this:
 
-- 'https://crontab.guru/#*/30_*_*_*_*'
+- https://crontab.guru/#\*/30\_\*\_\*\_\*\_\*
 
 ## Set up `nginx`
 
