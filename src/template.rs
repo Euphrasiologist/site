@@ -152,7 +152,9 @@ pub fn render_body(body: &str, webpage: WebpageType) -> String {
     format!(
         r#"  <body>
     <header>
-      <img src="/img/website_logo.svg" alt="Made with RX!" class="website_logo">
+      <a href="/">
+        <img src="/img/website_logo.svg" alt="Made with RX!" class="website_logo">
+      </a>
     </header>
     <main>
       <section>
