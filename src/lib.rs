@@ -48,7 +48,7 @@ pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
     let copy_status_img = std::process::Command::new("cp")
         .arg("-r")
         .arg("./img/")
-        .arg("public/img")
+        .arg("public")
         .output()?;
 
     eprintln!(

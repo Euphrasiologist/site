@@ -2,7 +2,6 @@ use anyhow::Result;
 use axum::{http::StatusCode, routing::get_service, Router};
 use std::net::SocketAddr;
 use tower_http::{services::ServeDir, trace::TraceLayer};
-use tracing::Level;
 use tracing_appender::rolling;
 use tracing_subscriber::{
     fmt::writer::MakeWriterExt, layer::SubscriberExt, util::SubscriberInitExt,
@@ -13,7 +12,7 @@ use web_server::build_website;
 #[tokio::main]
 async fn main() -> Result<()> {
     // write to a file daily
-    let info_file = rolling::daily("./logs", "daily.log").with_max_level(tracing::Level::INFO);
+    let info_file = rolling::daily("logs", "daily.log").with_max_level(tracing::Level::INFO);
 
     tracing_subscriber::registry()
         .with(tracing_subscriber::EnvFilter::new(

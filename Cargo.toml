@@ -3,6 +3,8 @@ name = "web_server"
 version = "0.1.0"
 edition = "2021"
 
+authors = ["Max Brown"]
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -16,3 +18,19 @@ pulldown-cmark = "0.9.1"
 walkdir = "2"
 pico-args = "0.4.2"
 tracing-appender = "0.2.2"
+
+[package.metadata.deb]
+maintainer = "Max Brown <max_brown1000@hotmail.co.uk>"
+copyright = "2023, Max Brown"
+depends = "$auto, systemd"
+conf-files = ["/usr/local/etc/web-config.ini", "/etc/systemd/system/web-server.service"]
+extended-description = """\
+web-server written in rust.\
+"""
+section = "admin"
+priority = "optional"
+assets = [
+    ["target/release/web_server", "/usr/local/bin/", "755"],
+    ["assets/web-config.ini", "/usr/local/etc/", "644"],
+    ["assets/web-server.service", "/etc/systemd/system/", "644"],
+]
