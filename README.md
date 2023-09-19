@@ -109,6 +109,50 @@ python3 -m http.server 8080 --bind 127.0.0.1
 
 ## Run the server, check the browser
 
+### Setting up for production
+
+If you want to set up your Rust server (this is specifically for Rust now) to run like the `nginx` server we made above, there are a few things to do. I followed <a href="https://gill.net.in/posts/creating-web-server-deb-binary-with-rust/">this tutorial</a>. But I briefly summarise here.
+
+1. Create an `./assets` folder in this cloned repo.
+2. Add `./assets/web-config.ini` and initiate with these values:
+
+
+```txt
+# you'll need to put your server address/port here
+# these are the ones I used.
+server_address = "127.0.0.1"
+server_port = "8080"
+```
+
+3. Add an `./assets/web-service.service` file and initiate like this:
+
+```
+[Unit]
+Description=rust server
+After=network.target
+
+[Service]
+ExecStart=/path/to/web/server/executable
+WorkingDirectory=/path/to/your/server/repo/root
+Type=exec
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+```
+
+4. Download `cargo deb`. This will create a debian package from your project. Add to your `Cargo.toml` some lines like <a href="https://github.com/Euphrasiologist/site/blob/main/Cargo.toml">in my setup</a>.
+5. Run `cargo deb` in your crate.
+6. Run `sudo dpkg -i <path to your .deb file (usually in ./target/debian)>`
+7. Hooray, now you can run your debian package in the background like a proper linux server using the same commands you'd use for the `nginx` server:
+
+```
+sudo systemctl start web-server
+sudo systemctl status web-server
+sudo systemctl restart web-server
+sudo systemctl stop web-server
+```
+
 Now you can run your server on your little Pi, and go to your domain name, and it should display your website. Please note, this set up has little to no security, if someone mean attacks your website there isn't much you can do. So I hope nobody does that. This isn't AWS or anything.
 
 Lastly, have fun! I hope this short guide has been somewhat comprehensive. I learned a lot about how the web/websites work doing this. I've probably left enough out that you'll need to hack and be a little frustrated, but you should be able to get it done. If not, please let me know and I'll add in some more notes. I'm reasonably active on GitHub.
