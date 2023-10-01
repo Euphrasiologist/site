@@ -71,12 +71,16 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     .blog_link {
       font-family: 'Courier New', monospace;
       text-align: left;
-      font-size: 20px;
-      font-size: 3vw;
+      font-size: 2.5vw;
+      text-align: middle;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     
     #blog_link {
       color: #023020;
+      text-align: left;
     }
 
     #blog_link:hover {
@@ -84,13 +88,11 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
     }
 
     .blog_date {
-      float: right;
-      position: relative;
-      bottom: 2vh;
-      text-align: center;
+      padding: 1%;
+      text-align: left;
       font-family: monospace;
       /* so we don't get weird jumping of blog elements */
-      font-size: min(1.2vw, 30);
+      font-size: 1.2vw;
       color: #FE612C;
     }
 
@@ -110,7 +112,7 @@ pub const HEADER: &str = r#"<!DOCTYPE html>
 
     .content {
       margin: auto;
-      width: 40%;
+      width: 80%;
       padding: 10px;
 	  text-align: center;
     }

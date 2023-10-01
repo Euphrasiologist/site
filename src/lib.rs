@@ -70,7 +70,7 @@ pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
     for file in &markdown_files {
         let mut html = template::HEADER.to_owned();
 
-        let markdown_file = std::fs::read_to_string(&file)?;
+        let markdown_file = std::fs::read_to_string(file)?;
 
         let parser =
             pulldown_cmark::Parser::new_ext(&markdown_file, pulldown_cmark::Options::all());
@@ -107,10 +107,10 @@ fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
         .into_iter()
         .map(|file| {
             let file = file.trim_start_matches(output_dir);
-            let title = file.trim_start_matches("/").trim_end_matches(".html");
+            let title = file.trim_start_matches('/').trim_end_matches(".html");
 
             // split the date off and put to the side?
-            let date: Vec<_> = title.clone().split("-").collect();
+            let date: Vec<_> = title.clone().split('-').collect();
             let date_op = match date.get(1) {
                 Some(d) => d.to_owned().trim(),
                 None => "",
@@ -119,9 +119,9 @@ fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
             (
                 format!(
                     r#"<div class="blog_link">
-                    <a href="{}" id="blog_link">{}</a>
+                <div id="blog_link"><a href="{}" id="blog_link">{}</a></div>
+                <div class="blog_date"><span class="blog_date">{}</span></div>
                 </div>
-                <span class="blog_date">{}</span>
                 "#,
                     file,
                     // so we are not repeating the info
