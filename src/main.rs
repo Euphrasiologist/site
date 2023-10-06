@@ -1,5 +1,6 @@
 use anyhow::Result;
 use axum::{http::StatusCode, routing::get_service, Router};
+use std::env;
 use std::net::SocketAddr;
 use tower_http::{services::ServeDir, trace::TraceLayer};
 use tracing_appender::rolling;
@@ -9,6 +10,18 @@ use web_server::build_website;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    // we want to be able to render website without running a server too.
+    if let Some(build) = env::args().nth(1) {
+        if build != *"build" {
+            eprintln!("The cli arg was incorrect, it should be 'build'.");
+            std::process::exit(0);
+        }
+        // the rest of the functionality as a static web builder runs through
+        // this function here.
+        build_website("content", "public")?;
+        std::process::exit(1);
+    }
+
     // write to a file daily
     let info_file = rolling::daily("logs", "daily.log");
 
@@ -26,10 +39,6 @@ async fn main() -> Result<()> {
         ))
         .with(file_layer)
         .init();
-
-    // the rest of the functionality as a static web builder runs through
-    // this function here.
-    build_website("content", "public")?;
 
     let app = Router::new()
         .nest(

@@ -1,4 +1,5 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
+use chrono::NaiveDate;
 use std::path::Path;
 
 /// The HTML template used for every page on the website.
@@ -99,11 +100,17 @@ pub fn build_website(content_dir: &str, output_dir: &str) -> Result<()> {
     Ok(())
 }
 
+#[derive(Debug)]
+struct BlogPost {
+    inner_html: String,
+    date: NaiveDate,
+}
+
 /// Write the index, entry point for the website.
 fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
     let mut html = template::HEADER.to_owned();
 
-    let mut all_blogs = files
+    let all_blogs = files
         .into_iter()
         .map(|file| {
             let file = file.trim_start_matches(output_dir);
@@ -113,11 +120,16 @@ fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
             let date: Vec<_> = title.clone().split('-').collect();
             let date_op = match date.get(1) {
                 Some(d) => d.to_owned().trim(),
-                None => "",
+                None => "01.01.1900", // some very early date?
             };
 
-            (
-                format!(
+            let chrono_date = match NaiveDate::parse_from_str(date_op, "%d.%m.%Y") {
+                Ok(d) => d,
+                Err(err) => bail!("There was an error parsing one of the dates: {}", err),
+            };
+
+            Ok(BlogPost {
+                inner_html: format!(
                     r#"<div class="blog_link">
                 <div id="blog_link"><a href="{}" id="blog_link">{}</a></div>
                 <div class="blog_date"><span class="blog_date">{}</span></div>
@@ -126,19 +138,37 @@ fn write_index(files: Vec<String>, output_dir: &str) -> Result<()> {
                     file,
                     // so we are not repeating the info
                     title.replace(&format!(" - {}", date_op), ""),
-                    date_op
+                    match date_op {
+                        "01.01.1900" => "".to_string(),
+                        d => d.to_string(),
+                    }
                 ),
-                date_op.to_string(),
-            )
+                date: chrono_date,
+            })
         })
-        .collect::<Vec<(String, String)>>();
+        .collect::<Result<Vec<BlogPost>>>();
 
     // order blogs by date ascending
-    all_blogs.sort_by(|(_, a), (_, b)| b.cmp(a));
+    let mut all_blogs = all_blogs?;
+    all_blogs.sort_by(
+        |BlogPost {
+             inner_html: _,
+             date: d1,
+         },
+         BlogPost {
+             inner_html: _,
+             date: d2,
+         }| d2.cmp(d1),
+    );
 
     let body = all_blogs
         .iter()
-        .map(|(a, _)| a.clone())
+        .map(
+            |BlogPost {
+                 inner_html,
+                 date: _,
+             }| inner_html.clone(),
+        )
         .collect::<Vec<String>>()
         .join("<br/>\n");
 

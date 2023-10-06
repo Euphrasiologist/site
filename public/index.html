@@ -66,12 +66,16 @@
     .blog_link {
       font-family: 'Courier New', monospace;
       text-align: left;
-      font-size: 20px;
-      font-size: 3vw;
+      font-size: 2.5vw;
+      text-align: middle;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     
     #blog_link {
       color: #023020;
+      text-align: left;
     }
 
     #blog_link:hover {
@@ -79,13 +83,11 @@
     }
 
     .blog_date {
-      float: right;
-      position: relative;
-      bottom: 2vh;
-      text-align: center;
+      padding: 1%;
+      text-align: left;
       font-family: monospace;
       /* so we don't get weird jumping of blog elements */
-      font-size: min(1.2vw, 30);
+      font-size: 1.2vw;
       color: #FE612C;
     }
 
@@ -105,7 +107,7 @@
 
     .content {
       margin: auto;
-      width: 40%;
+      width: 80%;
       padding: 10px;
 	  text-align: center;
     }
@@ -158,24 +160,29 @@
         <br/>
         <div class="content">
           <div class="blog_link">
-                    <a href="/fasta_windows - 09.04.2022.html" id="blog_link">fasta_windows</a>
+                <div id="blog_link"><a href="/tree of the British flora - 06.10.2023.html" id="blog_link">tree of the British flora</a></div>
+                <div class="blog_date"><span class="blog_date">06.10.2023</span></div>
                 </div>
-                <span class="blog_date">09.04.2022</span>
                 <br/>
 <div class="blog_link">
-                    <a href="/first blog post - 01.04.2022.html" id="blog_link">first blog post</a>
+                <div id="blog_link"><a href="/fasta_windows - 09.04.2022.html" id="blog_link">fasta_windows</a></div>
+                <div class="blog_date"><span class="blog_date">09.04.2022</span></div>
                 </div>
-                <span class="blog_date">01.04.2022</span>
                 <br/>
 <div class="blog_link">
-                    <a href="/research.html" id="blog_link">research</a>
+                <div id="blog_link"><a href="/first blog post - 01.04.2022.html" id="blog_link">first blog post</a></div>
+                <div class="blog_date"><span class="blog_date">01.04.2022</span></div>
                 </div>
-                <span class="blog_date"></span>
                 <br/>
 <div class="blog_link">
-                    <a href="/about.html" id="blog_link">about</a>
+                <div id="blog_link"><a href="/research.html" id="blog_link">research</a></div>
+                <div class="blog_date"><span class="blog_date"></span></div>
                 </div>
-                <span class="blog_date"></span>
+                <br/>
+<div class="blog_link">
+                <div id="blog_link"><a href="/about.html" id="blog_link">about</a></div>
+                <div class="blog_date"><span class="blog_date"></span></div>
+                </div>
                 
         </div>
       </section>

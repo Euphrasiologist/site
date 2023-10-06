@@ -18,6 +18,7 @@ pulldown-cmark = "0.9.1"
 walkdir = "2"
 pico-args = "0.4.2"
 tracing-appender = "0.2.2"
+chrono = "0.4.31"
 
 [package.metadata.deb]
 maintainer = "Max Brown <max_brown1000@hotmail.co.uk>"
